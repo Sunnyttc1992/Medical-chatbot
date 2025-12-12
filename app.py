@@ -8,13 +8,14 @@ import streamlit as st
 
 ## We will use Titan Embedding Model to genearate Embeddings.
 
+import boto3
 from langchain_aws import BedrockEmbeddings, Bedrock
 from langchain_community.vectorstores import FAISS
 
 ## Data ingestion Libraries
 
 import numpy as np
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.document_loaders import PyPDFDirectoryLoader
 
 # Vector Embedding and Vector store
@@ -32,7 +33,7 @@ bedrock_embeddings = BedrockEmbeddings(model_id="amazon.titan-embed-text-v2:0", 
 ## data ingestion
 
 def data_ingestion():
-    loader = pyPDFDirectoryLoader("data")
+    loader = PyPDFDirectoryLoader("data")
     documents = loader.load()
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
     docs = text_splitter.split_documents(documents)
@@ -60,8 +61,8 @@ def get_llama_llm():
 prompt_template = f"""Use the following pieces of context to answer the question at the end. If you don't know the answer, just say that you don't know, don't try to make up an answer.
 <context>
 {context}
-</context
-
+</context>
+Question: {question}
 Question: {question}
 
 Assistant:"""
@@ -84,3 +85,36 @@ def get_response_llm(llm,vectorstore, query):
     response = qa_chain({"query": query})
     return response['result']
 
+def main():
+    st.title("Document QA using Bedrock LLMs and Embeddings")
+    st.sidebar.title("Settings")
+
+    llm_option = st.sidebar.selectbox(
+        "Select LLM Model",
+        ("Claude 3 Haiku", "Llama 3 Instruct")
+    )
+
+    if llm_option == "Claude 3 Haiku":
+        llm = get_claude_llm()
+    else:
+        llm = get_llama_llm()
+
+    if st.sidebar.button("Ingest Data and Create Vector Store"):
+        with st.spinner("Ingesting data and creating vector store..."):
+            docs = data_ingestion()
+            vectorstore = get_vectorstore(docs)
+        st.success("Data ingested and vector store created!")
+
+    if os.path.exists("faiss_index"):
+        vectorstore = FAISS.load_local("faiss_index", bedrock_embeddings)
+        query = st.text_input("Enter your question:")
+        if st.button("Get Answer"):
+            with st.spinner("Getting answer..."):
+                answer = get_response_llm(llm, vectorstore, query)
+            st.success("Answer retrieved!")
+            st.write("Answer:", answer)
+    else:
+        st.warning("Please ingest data and create vector store first.")
+
+if __name__ == "__main__":
+    main()
