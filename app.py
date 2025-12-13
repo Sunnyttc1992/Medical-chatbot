@@ -3,75 +3,87 @@ from agent import get_agent_response
 
 MED_CSS = """
 :root{
-  --bg:#0b1220;
-  --panel:#0f1a2b;
-  --panel2:#111f33;
-  --text:#e6eefc;
-  --muted:#a7b6d6;
-  --accent:#4aa3ff;
-  --warn:#ffcc66;
-  --danger:#ff6b6b;
-  --border:rgba(255,255,255,0.08);
+  --bg:#f6f8fb;
+  --panel:#ffffff;
+  --panel2:#ffffff;
+  --text:#0f172a;
+  --muted:#475569;
+  --accent:#2563eb;   /* clinical blue */
+  --warn:#f59e0b;
+  --danger:#dc2626;
+  --border:rgba(15,23,42,0.12);
   --radius:16px;
 }
 
 .gradio-container{
   max-width: 1100px !important;
   margin: 0 auto !important;
-  background: linear-gradient(180deg, var(--bg), #070b14);
-  color: var(--text);
+  background: var(--bg) !important;
+  color: var(--text) !important;
 }
 
+/* Header card */
 #app_header{
-  background: rgba(15,26,43,0.75);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 14px 18px;
-  margin-bottom: 14px;
-  backdrop-filter: blur(8px);
+  background: var(--panel) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius) !important;
+  padding: 14px 18px !important;
+  margin-bottom: 14px !important;
+  box-shadow: 0 8px 24px rgba(15,23,42,0.06) !important;
 }
 
+/* Chips */
 .badge{
   display:inline-block;
   padding: 6px 10px;
   border-radius: 999px;
   border: 1px solid var(--border);
+  background: #f1f5f9;
   color: var(--muted);
   font-size: 12px;
   margin-left: 8px;
 }
 
+/* Callouts */
 .callout{
   border: 1px solid var(--border);
   border-left: 4px solid var(--warn);
-  background: rgba(17,31,51,0.6);
+  background: #fff7ed;
   padding: 10px 12px;
   border-radius: 12px;
   color: var(--muted);
   margin-top: 10px;
 }
 
-.callout.danger{ border-left-color: var(--danger); }
-
-#chatbot{
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: rgba(15,26,43,0.55);
+.callout.danger{
+  border-left-color: var(--danger);
+  background: #fef2f2;
 }
 
+/* Chat surface */
+#chatbot{
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius) !important;
+  background: var(--panel) !important;
+  box-shadow: 0 8px 24px rgba(15,23,42,0.06) !important;
+}
+
+/* Buttons */
 .gr-button-primary{
   background: var(--accent) !important;
   border: none !important;
   border-radius: 12px !important;
 }
 
+/* Inputs */
 .gr-input, textarea{
   border-radius: 12px !important;
   border: 1px solid var(--border) !important;
-  background: rgba(15,26,43,0.55) !important;
+  background: var(--panel) !important;
   color: var(--text) !important;
 }
 
+/* Small text */
 .small-label{
   color: var(--muted);
   font-size: 12px;
