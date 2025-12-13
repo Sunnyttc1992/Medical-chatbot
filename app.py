@@ -115,7 +115,7 @@ def create_gradio_interface():
                 gr.Markdown("### Patient context (optional)")
                 with gr.Row():
                     age = gr.Dropdown(
-                        ["<18", "18–34", "35–49", "50–64", "65+"],
+                        ["New Born","1-18","<18", "18–34", "35–49", "50–64", "65+"],
                         label="Age range",
                         value="18–34",
                     )
